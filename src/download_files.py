@@ -20,5 +20,5 @@ for file_name, link in files.items():
             with open(file_path, 'ab+') as f:
                 f.write(r.content)
                 print(f'File {file_path} created')
-    else:
-        print(f'Failed when download files: {r.json()}')
+        else:
+            print(f'Failed when download files: {r.json()}')
