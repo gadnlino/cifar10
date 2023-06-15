@@ -8,6 +8,7 @@ files = {
     'data_batch_4': 'https://drive.google.com/uc?id=1nFd9bI8i9MRbQNz3AAX2pOg6EpOybphQ&confirm=t',
     'data_batch_5': 'https://drive.google.com/uc?id=18jULpgGqMvf8OIHeT-q0HUEA9rAKt0CK&confirm=t',
     'test_batch': 'https://drive.google.com/uc?id=1YLjUfR3HAeoH4icL1BRyAtkeiyX2PvSm&confirm=t',
+    'batches.meta': 'https://drive.google.com/uc?id=1Sz9FXGUqPv69MR6xuH_A59234M_z5ep1&confirm=t'
 }
 
 
