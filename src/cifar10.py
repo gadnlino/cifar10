@@ -46,6 +46,7 @@ class Cifar10:
         for data in dic[b'data']:
             img = {
                 'label': dic[b'labels'][cnt],
+                'colors_original': data,
                 'colors': {
                     'r': list(data[0:1024]),
                     'g': list(data[1024:2048]),
