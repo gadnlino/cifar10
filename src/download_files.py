@@ -18,7 +18,7 @@ for file_name, link in files.items():
         r = requests.get(link, allow_redirects=True)
 
         if(r.status_code >= 200 and r.status_code <= 299):
-            with open(file_path, 'ab+') as f:
+            with open(file_path, 'wb') as f:
                 f.write(r.content)
                 print(f'File {file_path} created')
         else:

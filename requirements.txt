@@ -1,1 +1,6 @@
 requests
+seaborn
+numpy
+pandas
+matplotlib
+tensorflow==2.12.0
