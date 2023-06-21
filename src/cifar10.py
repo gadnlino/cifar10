@@ -1,3 +1,6 @@
+#https://keras.io/getting_started/intro_to_keras_for_engineers/
+
+
 import os
 import pickle
 
@@ -8,10 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import itertools
-
-
-
-print(tf.__version__)
+from datetime import datetime
 
 DATASET_FOLDER = './files/dataset'
 
@@ -27,88 +27,24 @@ TEST_FILES = [
     'test_batch'
 ]
 
+RESULTS_FOLDER = f'files/results/{str(datetime.utcnow().timestamp()).replace(".", "")}'
+
+if not os.path.exists(RESULTS_FOLDER):
+    os.makedirs(RESULTS_FOLDER)
+
 class Cifar10:
-    def __init__(self) -> None:
-        self.__model = None
-        self.__label_meta = None
-        self.__images_batches = []
-
-    def __download_files(self):
-        import download_files
-
-    def __read_file(self, file):
-        with open(file, 'rb') as fo:
-            dict = pickle.load(fo, encoding='bytes')
-            return dict
-    
-    def __add_batch(self, dic):
-        # Example of an image in a batch
-        # {
-        #     'label': 1,
-        #     'colors': {
-        #         'r': [],
-        #         'g': [],
-        #         'b': []
-        #     }
-        # }
-
-        batch = []
-        cnt = 0
-
-        for data in dic[b'data']:
-            img = {
-                'label': dic[b'labels'][cnt],
-                'colors_original': data,
-                'colors': {
-                    'r': list(data[0:1024]),
-                    'g': list(data[1024:2048]),
-                    'b': list(data[2048:3072]),
-                }
-            }
-
-            batch.append(img)
-
-            cnt += 1
-
-        self.__images_batches.append(batch)
-
-    def run(self):
-        self.__download_files()
-
-        for file in TRAINING_FILES:
-            batch = self.__read_file(os.path.join(DATASET_FOLDER, file))
-            self.__add_batch(batch)
-        
-        print(len(self.__images_batches))
-        print(len(self.__images_batches[0][0]['colors']['r']))
-        print(len(self.__images_batches[0][0]['colors']['g']))
-        print(len(self.__images_batches[0][0]['colors']['b']))
-    
     def run_tensorflow(self):
+        print(f'Results will be saved at the folder : {RESULTS_FOLDER}')
         #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
 
         cifar10 = tf.keras.datasets.cifar10        
 
         (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
-        assert x_train.shape == (50000, 32, 32, 3)
-        assert x_test.shape == (10000, 32, 32, 3)
-        assert y_train.shape == (50000, 1)
-        assert y_test.shape == (10000, 1)
-
         y_train = y_train.flatten()
         y_test = y_test.flatten()
 
         classes = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-
-        plt.figure(figsize=(10,7))
-        p = sns.countplot(y_train.flatten())
-        p.set(xticklabels=classes)
-
-        plt.show(block=False)
-        plt.clf()
-
-        input_shape = (32, 32, 3)
 
         x_train=x_train.reshape(x_train.shape[0], x_train.shape[1], x_train.shape[2], 3)
         x_train=x_train / 255.0
@@ -119,7 +55,7 @@ class Cifar10:
         y_test = tf.one_hot(y_test.astype(np.int32), depth=10)
 
         plt.imshow(x_train[100])
-        plt.savefig("100_train_example.jpg")
+        plt.savefig(f"{RESULTS_FOLDER}/100_train_example.jpg")
         plt.show(block=False)
         plt.clf()
 
@@ -127,7 +63,7 @@ class Cifar10:
 
         batch_size = 32
         num_classes = 10
-        epochs = 50
+        epochs = 10
 
         model = tf.keras.models.Sequential([
             tf.keras.layers.Conv2D(32, 3, padding='same', input_shape=x_train.shape[1:], activation='relu'),
@@ -145,6 +81,9 @@ class Cifar10:
             tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(num_classes, activation='softmax'),
         ])
+
+        print(model.summary())
+
         model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0001),
             loss='categorical_crossentropy', metrics=['acc'])
 
@@ -157,7 +96,7 @@ class Cifar10:
         ax[1].plot(history.history['acc'], color='b', label="Training Accuracy")
         legend = ax[1].legend(loc='best', shadow=True)
 
-        fig.savefig("loss_and_accuracy.jpg")
+        fig.savefig(f"{RESULTS_FOLDER}/loss_and_accuracy.jpg")
         ax[0].clear()
         ax[1].clear()
         fig.clf()
@@ -173,5 +112,5 @@ class Cifar10:
         plt.figure(figsize=(12, 9))
         c = sns.heatmap(confusion_mtx, annot=True, fmt='g')
         c.set(xticklabels=classes, yticklabels=classes)
-        plt.savefig("confusion_mtx.jpg")
+        plt.savefig(f"{RESULTS_FOLDER}/confusion_mtx.jpg")
         plt.clf()
