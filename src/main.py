@@ -84,7 +84,7 @@ def model_vgg19():
     learn_rate=.001
 
     sgd=tf.keras.optimizers.SGD(lr=learn_rate,momentum=.9,nesterov=False)
-    #adam=tf.keras.optimizers.Adam(lr=learn_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+    
 
     model_1.compile(optimizer=sgd,loss='categorical_crossentropy',metrics=METRICS)
 
@@ -92,9 +92,35 @@ def model_vgg19():
 
 def model_resnet():
     #https://www.kaggle.com/code/adi160/cifar-10-keras-transfer-learning/notebook
-    pass
+    #Since we have already defined Resnet50 as base_model_2, let us build the sequential model.
+
+    base_model_2 = ResNet50(include_top=False,weights='imagenet',input_shape=INPUT_SHAPE,classes=10)
+
+    model_2=tf.keras.models.Sequential()
+    #Add the Dense layers along with activation and batch normalization
+    model_2.add(base_model_2)
+    model_2.add(tf.keras.layers.Flatten())
+
+
+    #Add the Dense layers along with activation and batch normalization
+    model_2.add(tf.keras.layers.Dense(4000,activation=('relu'),input_dim=512))
+    model_2.add(tf.keras.layers.Dense(2000,activation=('relu'))) 
+    model_2.add(tf.keras.layers.Dropout(.4))
+    model_2.add(tf.keras.layers.Dense(1000,activation=('relu'))) 
+    model_2.add(tf.keras.layers.Dropout(.3))#Adding a dropout layer that will randomly drop 30% of the weights
+    model_2.add(tf.keras.layers.Dense(500,activation=('relu')))
+    model_2.add(tf.keras.layers.Dropout(.2))
+    model_2.add(tf.keras.layers.Dense(10,activation=('softmax'))) #This is the classification layer
+
+    learn_rate=.001
+
+    adam=tf.keras.optimizers.Adam(lr=learn_rate, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False)
+
+    model_2.compile(optimizer=adam,loss='categorical_crossentropy',metrics=METRICS)
+
+    return model_2
 
 if(__name__ == "__main__"):
     cifar = Cifar10()
     #cifar.run()
-    cifar.run_training(model=model_vgg19(), epochs = 10, batch_size = 500, shuffle=True)
+    cifar.run_training(model=model_resnet(), epochs = 10, batch_size = 500, shuffle=True)
