@@ -73,16 +73,28 @@ class Cifar10:
 
         pd.DataFrame(data=history.history, columns=history.history.keys()).to_csv(f"{RESULTS_FOLDER}/history.csv")
 
-        fig, ax = plt.subplots(2,1)
-        ax[0].plot(history.history['loss'], color='b', label="Training Loss")
-        legend = ax[0].legend(loc='best', shadow=True)
+        fig, ax = plt.subplots(2,2)
+        ax[0][0].plot(history.history['loss'], color='b', label="Training Loss")
+        ax[0][0].plot(history.history['val_loss'], color='r', label="Validation Loss")
+        legend = ax[0][0].legend(loc='best', shadow=True)
 
-        ax[1].plot(history.history['categorical_accuracy'], color='b', label="Training Accuracy")
-        legend = ax[1].legend(loc='best', shadow=True)
+        ax[0][1].plot(history.history['categorical_accuracy'], color='b', label="Training Accuracy")
+        ax[0][1].plot(history.history['val_categorical_accuracy'], color='r', label="Validation Accuracy")
+        legend = ax[0][1].legend(loc='best', shadow=True)
 
-        fig.savefig(f"{RESULTS_FOLDER}/loss_and_accuracy.jpg")
-        ax[0].clear()
-        ax[1].clear()
+        ax[1][0].plot(history.history['precision'], color='b', label="Training Precision")
+        ax[1][0].plot(history.history['val_precision'], color='r', label="Validation Precision")
+        legend = ax[1][0].legend(loc='best', shadow=True)
+
+        ax[1][1].plot(history.history['recall'], color='b', label="Training Recall")
+        ax[1][1].plot(history.history['val_recall'], color='r', label="Validation Recall")
+        legend = ax[1][1].legend(loc='best', shadow=True)
+
+        fig.savefig(f"{RESULTS_FOLDER}/metrics.jpg")
+        ax[0][0].clear()
+        ax[0][1].clear()
+        ax[1][0].clear()
+        ax[1][1].clear()
         fig.clf()
 
         y_pred = model.predict(x_test)
