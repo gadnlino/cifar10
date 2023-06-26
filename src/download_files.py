@@ -11,9 +11,11 @@ files = {
     'batches.meta': 'https://drive.google.com/uc?id=1Sz9FXGUqPv69MR6xuH_A59234M_z5ep1&confirm=t'
 }
 
+folder_path = os.path.join('.','files','dataset')
+os.makedirs(folder_path, exist_ok=True)
 
 for file_name, link in files.items():
-    file_path = f'./files/dataset/{file_name}'
+    file_path = os.path.join(folder_path,file_name)
     if(not os.path.exists(file_path)):
         r = requests.get(link, allow_redirects=True)
 
