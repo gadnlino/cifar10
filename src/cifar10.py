@@ -13,6 +13,7 @@ import matplotlib.image as mpimg
 import itertools
 from datetime import datetime
 import json
+from contextlib import redirect_stdout
 
 DATASET_FOLDER = './files/dataset'
 
@@ -40,7 +41,7 @@ if not os.path.exists(RESULTS_FOLDER):
     os.makedirs(RESULTS_FOLDER)
 
 class Cifar10:
-    def save_results(self, summary, model_json, history, y_pred, y_true):
+    def save_results(self, model, history, y_pred, y_true):
         
         pd.DataFrame(data=history, columns=history.keys()).to_csv(f"{RESULTS_FOLDER}/history.csv")
 
@@ -80,15 +81,15 @@ class Cifar10:
         plt.clf()
 
         with open(f'{RESULTS_FOLDER}/model.json', 'w') as json_file:
-            json_file.write(model_json)
-        
-        with open(f'{RESULTS_FOLDER}/model_summary.txt', 'w') as summary_file:
-            summary_file.write(summary)
+            json_file.write(model.to_json())
 
-    def run_training(self, model, epochs = 10, batch_size = 32,shuffle=False):
-        summary = model.summary()
-        print(f'Results will be saved at the folder : {RESULTS_FOLDER}')
+        with open(f'{RESULTS_FOLDER}/model_summary.txt', 'w') as f:
+            with redirect_stdout(f):
+                model.summary()
+
+    def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False):
         #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
+        print(f'Results will be saved at the folder : {RESULTS_FOLDER}')
 
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
 
@@ -113,4 +114,4 @@ class Cifar10:
             use_multiprocessing=True, validation_data = (x_test, y_test),\
                 shuffle=shuffle)        
 
-        self.save_results(summary, model.to_json(), history.history, model.predict(x_test), np.argmax(y_test, axis = 1))
+        self.save_results(model, history.history, model.predict(x_test), np.argmax(y_test, axis = 1))

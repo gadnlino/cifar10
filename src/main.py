@@ -110,7 +110,7 @@ def model_resnet():
 
     learn_rate=.001
 
-    adam=tf.keras.optimizers.Adam(lr=learn_rate, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False)
+    adam=tf.keras.optimizers.Adam(learning_rate=learn_rate, beta_1=0.9, beta_2=0.999, amsgrad=False)
 
     model_2.compile(optimizer=adam,loss='categorical_crossentropy',metrics=METRICS)
 
@@ -118,5 +118,6 @@ def model_resnet():
 
 if(__name__ == "__main__"):
     cifar = Cifar10()
+    model = model_sigmoid()    
     #cifar.run()
-    cifar.run_training(model=model_example(), epochs = 1, batch_size = 64, shuffle=False)
+    cifar.run_fitting(model=model, epochs = 1, batch_size = 64, shuffle=False)
