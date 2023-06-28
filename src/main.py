@@ -31,8 +31,6 @@ def model_example():
             tf.keras.layers.Dense(10, activation='softmax'),
         ])
 
-    print(model.summary())
-
     #https://keras.io/api/losses/
     model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0001),
             loss='categorical_crossentropy', metrics=METRICS)
@@ -56,8 +54,6 @@ def model_sigmoid():
             # tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(10, activation='softmax'),
         ])
-
-    print(model.summary())
 
     #https://keras.io/api/losses/
     model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.01),
@@ -123,4 +119,4 @@ def model_resnet():
 if(__name__ == "__main__"):
     cifar = Cifar10()
     #cifar.run()
-    cifar.run_training(model=model_resnet(), epochs = 10, batch_size = 500, shuffle=True)
+    cifar.run_training(model=model_example(), epochs = 1, batch_size = 64, shuffle=False)
