@@ -31,19 +31,15 @@ TEST_FILES = [
 
 now = datetime.now()
 
-#RESULTS_FOLDER = f'files/results/{str(now.timestamp()).replace(".", "")}'
-
-RESULTS_FOLDER = f'files/results/{str(now.year)}-{str(now.month)}-{str(now.day)}-{str(now.hour)}-{str(now.minute)}-{str(now.second)}.{str(now.microsecond)}'
-
 CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 if not os.path.exists(RESULTS_FOLDER):
     os.makedirs(RESULTS_FOLDER)
 
 class Cifar10:
-    def save_results(self, model, history, y_pred, y_true):
+    def save_results(self, model, history, y_pred, y_true, results_folder):
         
-        pd.DataFrame(data=history, columns=history.keys()).to_csv(f"{RESULTS_FOLDER}/history.csv")
+        pd.DataFrame(data=history, columns=history.keys()).to_csv(f"{results_folder}/history.csv")
 
         fig, ax = plt.subplots(2,2)
         ax[0][0].plot(history['loss'], color='b', label="Training Loss")
@@ -62,7 +58,7 @@ class Cifar10:
         ax[1][1].plot(history['val_recall'], color='r', label="Validation Recall")
         legend = ax[1][1].legend(loc='best', shadow=True)
 
-        fig.savefig(f"{RESULTS_FOLDER}/metrics.jpg")
+        fig.savefig(f"{results_folder}/metrics.jpg")
         ax[0][0].clear()
         ax[0][1].clear()
         ax[1][0].clear()
@@ -77,19 +73,20 @@ class Cifar10:
         plt.figure(figsize=(12, 9))
         c = sns.heatmap(confusion_mtx, annot=True, fmt='g')
         c.set(xticklabels=CLASSES, yticklabels=CLASSES)
-        plt.savefig(f"{RESULTS_FOLDER}/confusion_mtx.jpg")
+        plt.savefig(f"{results_folder}/confusion_mtx.jpg")
         plt.clf()
 
-        with open(f'{RESULTS_FOLDER}/model.json', 'w') as json_file:
+        with open(f'{results_folder}/model.json', 'w') as json_file:
             json_file.write(model.to_json())
 
-        with open(f'{RESULTS_FOLDER}/model_summary.txt', 'w') as f:
+        with open(f'{results_folder}/model_summary.txt', 'w') as f:
             with redirect_stdout(f):
                 model.summary()
 
     def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False):
         #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
-        print(f'Results will be saved at the folder : {RESULTS_FOLDER}')
+        results_folder = f'files/results/{str(now.year)}-{str(now.month)}-{str(now.day)}-{str(now.hour)}-{str(now.minute)}-{str(now.second)}.{str(now.microsecond)}'
+        print(f'Results will be saved at the folder : {results_folder}')
 
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
 
@@ -114,4 +111,4 @@ class Cifar10:
             use_multiprocessing=True, validation_data = (x_test, y_test),\
                 shuffle=shuffle)        
 
-        self.save_results(model, history.history, model.predict(x_test), np.argmax(y_test, axis = 1))
+        self.save_results(model, history.history, model.predict(x_test), np.argmax(y_test, axis = 1), results_folder)
