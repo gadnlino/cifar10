@@ -1,0 +1,35 @@
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 32, 32, 64)        1792      
+                                                                 
+ conv2d_1 (Conv2D)           (None, 30, 30, 64)        36928     
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 15, 15, 64)       0         
+ )                                                               
+                                                                 
+ dropout (Dropout)           (None, 15, 15, 64)        0         
+                                                                 
+ conv2d_2 (Conv2D)           (None, 15, 15, 128)       73856     
+                                                                 
+ conv2d_3 (Conv2D)           (None, 13, 13, 128)       147584    
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 6, 6, 128)        0         
+ 2D)                                                             
+                                                                 
+ dropout_1 (Dropout)         (None, 6, 6, 128)         0         
+                                                                 
+ flatten (Flatten)           (None, 4608)              0         
+                                                                 
+ dense (Dense)               (None, 1024)              4719616   
+                                                                 
+ dropout_2 (Dropout)         (None, 1024)              0         
+                                                                 
+ dense_1 (Dense)             (None, 10)                10250     
+                                                                 
+=================================================================
+Total params: 4,990,026
+Trainable params: 4,990,026
+Non-trainable params: 0
+_________________________________________________________________

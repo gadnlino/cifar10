@@ -14,6 +14,7 @@ import itertools
 from datetime import datetime
 import json
 from contextlib import redirect_stdout
+from sklearn.model_selection import train_test_split
 
 DATASET_FOLDER = './files/dataset'
 
@@ -35,6 +36,9 @@ CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'hors
 
 class Cifar10:
     def save_results(self, model, history, y_pred, y_true, results_folder):
+
+        if not os.path.exists(results_folder):
+            os.makedirs(results_folder)
         
         pd.DataFrame(data=history, columns=history.keys()).to_csv(f"{results_folder}/history.csv")
 
@@ -80,7 +84,7 @@ class Cifar10:
             with redirect_stdout(f):
                 model.summary()
 
-    def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False):
+    def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False, get_test_from_training=False):
         #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
         results_folder = f'files/results/{str(now.year)}-{str(now.month)}-{str(now.day)}-{str(now.hour)}-{str(now.minute)}-{str(now.second)}.{str(now.microsecond)}'
 
@@ -90,6 +94,9 @@ class Cifar10:
         print(f'Results will be saved at the folder : {results_folder}')
 
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
+
+        if get_test_from_training:
+            x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.2, stratify=y_train, random_state=25565)
 
         y_train = y_train.flatten()
         y_test = y_test.flatten()

@@ -12,22 +12,123 @@ METRICS = [
 
 INPUT_SHAPE = (32, 32, 3)
 
-
-def model_example():
+def model_example(activaction='relu', padding='same'):
     #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
 
     model = tf.keras.models.Sequential([
-            tf.keras.layers.Conv2D(32, 3, padding='same', input_shape=INPUT_SHAPE, activation='relu'),
-            tf.keras.layers.Conv2D(32, 3, activation='relu'),
+            tf.keras.layers.Conv2D(32, 3, padding=padding, input_shape=INPUT_SHAPE, activation=activaction),
+            tf.keras.layers.Conv2D(32, 3, activation=activaction),
             tf.keras.layers.MaxPooling2D(),
             tf.keras.layers.Dropout(0.25),
-            tf.keras.layers.Conv2D(64, 3, padding='same', activation='relu'),
-            tf.keras.layers.Conv2D(64, 3, activation='relu'),
+            tf.keras.layers.Conv2D(64, 3, padding=padding, activation=activaction),
+            tf.keras.layers.Conv2D(64, 3, activation=activaction),
             tf.keras.layers.MaxPooling2D(),
             tf.keras.layers.Dropout(0.25),
             tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(512, activation='relu'),
+            tf.keras.layers.Dense(512, activation=activaction),
             tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dense(10, activation='softmax'),
+        ])
+
+    #https://keras.io/api/losses/
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0001),
+            loss='categorical_crossentropy', metrics=METRICS)
+
+    return model
+
+def model_example_kernel_maior(activaction='relu', padding='same'):
+    #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
+
+    model = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(32, 5, padding=padding, input_shape=INPUT_SHAPE, activation=activaction),
+            tf.keras.layers.Conv2D(32, 5, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Conv2D(64, 5, padding=padding, activation=activaction),
+            tf.keras.layers.Conv2D(64, 5, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(512, activation=activaction),
+            tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dense(10, activation='softmax'),
+        ])
+
+    #https://keras.io/api/losses/
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0001),
+            loss='categorical_crossentropy', metrics=METRICS)
+
+    return model
+
+
+def model_example_com_mais_layers(activaction='relu', padding='same'):
+    #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
+
+    model = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(32, 3, padding=padding, input_shape=INPUT_SHAPE, activation=activaction),
+            tf.keras.layers.Conv2D(32, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Conv2D(64, 3, padding=padding, activation=activaction),
+            tf.keras.layers.Conv2D(64, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Conv2D(128, 3, padding=padding, activation=activaction),
+            tf.keras.layers.Conv2D(128, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(512, activation=activaction),
+            tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dense(10, activation='softmax'),
+        ])
+
+    #https://keras.io/api/losses/
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0001),
+            loss='categorical_crossentropy', metrics=METRICS)
+
+    return model
+
+
+def model_example_mais_denso(activaction='relu', padding='same'):
+    #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
+
+    model = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(64, 3, padding=padding, input_shape=INPUT_SHAPE, activation=activaction),
+            tf.keras.layers.Conv2D(64, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Conv2D(128, 3, padding=padding, activation=activaction),
+            tf.keras.layers.Conv2D(128, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(1024, activation=activaction),
+            tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dense(10, activation='softmax'),
+        ])
+
+    #https://keras.io/api/losses/
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0001),
+            loss='categorical_crossentropy', metrics=METRICS)
+
+    return model
+
+def model_example_sem_dropout(activaction='relu', padding='same'):
+    #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
+
+    model = tf.keras.models.Sequential([
+            tf.keras.layers.Conv2D(32, 3, padding=padding, input_shape=INPUT_SHAPE, activation=activaction),
+            tf.keras.layers.Conv2D(32, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            # tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Conv2D(64, 3, padding=padding, activation=activaction),
+            tf.keras.layers.Conv2D(64, 3, activation=activaction),
+            tf.keras.layers.MaxPooling2D(),
+            # tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(512, activation=activaction),
+            # tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(10, activation='softmax'),
         ])
 
@@ -44,14 +145,14 @@ def model_sigmoid():
             tf.keras.layers.Conv2D(32, 3, padding='same', input_shape=INPUT_SHAPE, activation='sigmoid'),
             tf.keras.layers.Conv2D(32, 3, activation='sigmoid'),
             tf.keras.layers.MaxPooling2D(),
-            # tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Dropout(0.25),
             tf.keras.layers.Conv2D(64, 3, padding='same', activation='sigmoid'),
             tf.keras.layers.Conv2D(64, 3, activation='sigmoid'),
             tf.keras.layers.MaxPooling2D(),
-            # tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Dropout(0.25),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(512, activation='sigmoid'),
-            # tf.keras.layers.Dropout(0.5),
+            tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(10, activation='softmax'),
         ])
 
@@ -144,6 +245,16 @@ def model_lenet5():
 
 if(__name__ == "__main__"):
     cifar = Cifar10()
-    model = model_lenet5()    
-    #cifar.run()
-    cifar.run_fitting(model=model, epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='relu',    padding='valid'), epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='relu',    padding='same'), epochs = 25, batch_size = 32, shuffle=False)
+    cifar.run_fitting(model=model_example(activaction='relu',    padding='same'), epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_lenet5(), epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='relu',    padding='same'), epochs = 100, batch_size = 256, shuffle=False, get_test_from_training=True)
+    # cifar.run_fitting(model=model_example(activaction='relu',    padding='same'), epochs = 25, batch_size = 64, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='relu',    padding='same'), epochs = 25, batch_size = 16, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='sigmoid', padding='same'), epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='tanh',    padding='same'), epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_example(activaction='selu',    padding='same'), epochs = 25, batch_size = 32, shuffle=False)
+    # cifar.run_fitting(model=model_vgg19(), epochs = 25, batch_size = 32, shuffle=False, get_test_from_training=True)
+    # cifar.run_fitting(model=model_resnet(), epochs = 25, batch_size = 32, shuffle=False)
+

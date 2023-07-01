@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 files/dataset/
 files/results/
+!files/results/exp*
