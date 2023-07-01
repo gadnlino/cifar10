@@ -1,23 +1,29 @@
-Model: "sequential"
+Model: "sequential_3"
 _________________________________________________________________
  Layer (type)                Output Shape              Param #   
 =================================================================
- vgg19 (Functional)          (None, 1, 1, 512)         20024384  
+ resnet50 (Functional)       (None, 1, 1, 2048)        23587712  
                                                                  
- flatten (Flatten)           (None, 512)               0         
+ flatten_3 (Flatten)         (None, 2048)              0         
                                                                  
- dense (Dense)               (None, 1024)              525312    
+ dense_9 (Dense)             (None, 4000)              8196000   
                                                                  
- dense_1 (Dense)             (None, 512)               524800    
+ dense_10 (Dense)            (None, 2000)              8002000   
                                                                  
- dense_2 (Dense)             (None, 256)               131328    
+ dropout_6 (Dropout)         (None, 2000)              0         
                                                                  
- dense_3 (Dense)             (None, 128)               32896     
+ dense_11 (Dense)            (None, 1000)              2001000   
                                                                  
- dense_4 (Dense)             (None, 10)                1290      
+ dropout_7 (Dropout)         (None, 1000)              0         
+                                                                 
+ dense_12 (Dense)            (None, 500)               500500    
+                                                                 
+ dropout_8 (Dropout)         (None, 500)               0         
+                                                                 
+ dense_13 (Dense)            (None, 10)                5010      
                                                                  
 =================================================================
-Total params: 21,240,010
-Trainable params: 21,240,010
-Non-trainable params: 0
+Total params: 42,292,222
+Trainable params: 42,239,102
+Non-trainable params: 53,120
 _________________________________________________________________
