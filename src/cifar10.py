@@ -33,9 +33,6 @@ now = datetime.now()
 
 CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
-if not os.path.exists(RESULTS_FOLDER):
-    os.makedirs(RESULTS_FOLDER)
-
 class Cifar10:
     def save_results(self, model, history, y_pred, y_true, results_folder):
         
@@ -86,6 +83,10 @@ class Cifar10:
     def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False):
         #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
         results_folder = f'files/results/{str(now.year)}-{str(now.month)}-{str(now.day)}-{str(now.hour)}-{str(now.minute)}-{str(now.second)}.{str(now.microsecond)}'
+
+        if not os.path.exists(results_folder):
+            os.makedirs(results_folder)
+
         print(f'Results will be saved at the folder : {results_folder}')
 
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()

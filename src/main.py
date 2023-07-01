@@ -116,8 +116,34 @@ def model_resnet():
 
     return model_2
 
+def model_lenet5():
+    #https://colab.research.google.com/drive/1CVm50PGE4vhtB5I_a_yc4h5F-itKOVL9#scrollTo=zLdfGt_GlP0x
+    model = tf.keras.models.Sequential()
+
+    model.add(tf.keras.layers.Conv2D(filters=6, kernel_size=(3, 3), activation='relu', input_shape=INPUT_SHAPE))
+    model.add(tf.keras.layers.AveragePooling2D())
+
+    model.add(tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), activation='relu'))
+    model.add(tf.keras.layers.AveragePooling2D())
+
+    model.add(tf.keras.layers.Flatten())
+
+    model.add(tf.keras.layers.Dense(units=120, activation='relu'))
+
+    model.add(tf.keras.layers.Dense(units=84, activation='relu'))
+
+    model.add(tf.keras.layers.Dense(units=10, activation = 'softmax'))
+
+    learn_rate=.001
+
+    adam=tf.keras.optimizers.Adam(learning_rate=learn_rate, beta_1=0.9, beta_2=0.999, amsgrad=False)
+
+    model.compile(optimizer=adam,loss='categorical_crossentropy',metrics=METRICS)
+
+    return model
+
 if(__name__ == "__main__"):
     cifar = Cifar10()
-    model = model_sigmoid()    
+    model = model_lenet5()    
     #cifar.run()
-    cifar.run_fitting(model=model, epochs = 1, batch_size = 64, shuffle=False)
+    cifar.run_fitting(model=model, epochs = 25, batch_size = 32, shuffle=False)
