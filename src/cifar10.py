@@ -30,8 +30,6 @@ TEST_FILES = [
     'test_batch'
 ]
 
-now = datetime.now()
-
 CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 class Cifar10:
@@ -84,10 +82,13 @@ class Cifar10:
             with redirect_stdout(f):
                 model.summary()
 
-    def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False, get_test_from_training=False):
+    def run_fitting(self, model, epochs = 10, batch_size = 32,shuffle=False, get_test_from_training=False, results_folder=None):
         #https://www.kaggle.com/code/amyjang/tensorflow-cifar10-cnn-tutorial/notebook
-        results_folder = f'files/results/{str(now.year)}-{str(now.month)}-{str(now.day)}-{str(now.hour)}-{str(now.minute)}-{str(now.second)}.{str(now.microsecond)}'
 
+        if results_folder is None:
+            now = datetime.now()
+            results_folder = f'files/results/{str(now.year)}-{str(now.month)}-{str(now.day)}-{str(now.hour)}-{str(now.minute)}-{str(now.second)}.{str(now.microsecond)}'
+        
         if not os.path.exists(results_folder):
             os.makedirs(results_folder)
 
